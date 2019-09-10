@@ -102,10 +102,10 @@ function farm_api_oauth_authorized_form($form, &$form_state){
 /**
  * Implements oauth2_server_default_scope().
  */
-function oauth2_server_test_oauth2_server_default_scope($server) {
+function farm_api_oauth_oauth2_server_default_scope($server) {
   // Grant "farm_restws_access" by default.
-  if ($server->name == 'farm_oauth') {
-    return array('farm_restws_access');
+  if ($server->name == 'farmos_oauth') {
+    return array('farmos_restws_access');
   }
 }
 
