@@ -6,6 +6,100 @@
  */
 
 /**
+ * Implements hook_menu().
+ */
+function farm_api_oauth_menu(){
+  $items = array();
+  $items['api/authorized'] = [
+    'title'            => 'farmOS API Client Authorized',
+    'description'      => 'Callback page for authorized farmOS API Clients.',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('farm_api_oauth_authorized_form'),
+    'access arguments' => ['Use OAuth2 Server'],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_form().
+ * Callback page after authorizing OAuth2 farmOS API Clients.
+ */
+function farm_api_oauth_authorized_form($form, &$form_state){
+  global $base_root;
+  $request_url = $base_root . request_uri();
+
+  $params = drupal_get_query_parameters();
+
+  $access_token = '123456789';
+
+  $form['redirect_uri'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Redirect URI'),
+    '#description' => t('Copy this link which includes the following values:'),
+    '#default_value' => $request_url,
+    '#attributes' => array('readonly' => 'readonly'),
+  );
+
+  $form['authorization_code'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Authorization Code'),
+    '#description' => t('Use the Authorization Code to get an Access Token.'),
+    '#default_value' => $params['code'],
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['code']),
+  );
+
+  $form['access_token'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Access Token'),
+    '#description' => t('Include this Token in an HTTP \'Bearer Authentication\' Header to access
+      protected resources.'),
+    '#default_value' => $access_token,
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['access_token']),
+  );
+
+  $form['access_token_expiration'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Expires In'),
+    '#description' => t('Seconds until expiration.'),
+    '#default_value' => $access_token,
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['expires_in']),
+  );
+
+  $form['token_type'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Token Type'),
+    '#description' => t('Bearer by default.'),
+    '#default_value' => $access_token,
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['token_type']),
+  );
+
+  $form['scope'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Scope'),
+    '#description' => t('Authorized OAuth2 Scopes'),
+    '#default_value' => $access_token,
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['scope']),
+  );
+
+  $form['state'] = array(
+    '#type' => 'textfield',
+    '#title' => t('State'),
+    '#description' => t('Include this in your header to maintain CORS.'),
+    '#default_value' => $params['state'],
+    '#attributes' => array('readonly' => 'readonly'),
+    '#access' => isset($params['state']),
+  );
+
+  return $form;
+}
+
+/**
  * Implements oauth2_server_default_scope().
  */
 function oauth2_server_test_oauth2_server_default_scope($server) {
@@ -70,8 +164,8 @@ function farm_api_oauth_enable(){
   // The module supports entering multiple redirect uris separated by a
   // newline. Both a dummy and the real uri are specified to confirm that
   // validation passes.
-  $client->redirect_uri = url('authorized', array('absolute' => TRUE));
-  $client->automatic_authorization = TRUE;
+  $client->redirect_uri = url('api/authorized', array('absolute' => TRUE));
+  $client->automatic_authorization = FALSE;
   $client->save();
 }
 
