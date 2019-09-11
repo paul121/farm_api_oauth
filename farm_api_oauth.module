@@ -125,6 +125,13 @@ function farm_api_oauth_oauth2_server_default_scope($server) {
  * Implements hook_enable().
  */
 function farm_api_oauth_enable(){
+  // Grant oauth2 server permissions to all users.
+  // Permission is needed for clients to access the
+  // /oauth2/authorize and oauth2/token endpoints anonymously (or as an authenticated user)
+  $permissions = array('use oauth2 server');
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, $permissions);
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+
   // Set variables for restws_oauth2_server configuration.
   $server_name = 'farmos_oauth';
   variable_set('restws_oauth2_server_name', $server_name);
