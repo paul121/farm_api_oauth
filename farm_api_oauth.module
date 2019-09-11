@@ -15,7 +15,7 @@ function farm_api_oauth_menu(){
     'description'      => 'Callback page for authorized farmOS API Clients.',
     'page callback'    => 'drupal_get_form',
     'page arguments'   => array('farm_api_oauth_authorized_form'),
-    'access arguments' => ['Use OAuth2 Server'],
+    'access arguments' => array('use oauth2 server'),
   ];
 
   return $items;
