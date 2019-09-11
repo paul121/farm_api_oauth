@@ -188,8 +188,8 @@ function farm_api_oauth_disable(){
   // Assume that the user does not change the OAuth2 Server or Scope
   // because they are using this module with farmOS. Otherwise this could
   // potentially delete other configured OAuth2 Servers and Scopes.
-  $server_name = variable_get('restws_oauth2_server_name');
-  $scope_name = variable_get('restws_oauth2_server_scope');
+  $server_name = variable_get('restws_oauth2_server_name', 'farmos_oauth');
+  $scope_name = variable_get('restws_oauth2_server_scope', 'farmos_restws_access');
 
   // Delete OAuth2 Entities.
   entity_delete('oauth2_server_client', 'farmos_api_client');
