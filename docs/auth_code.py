@@ -11,7 +11,7 @@ import json
 client_id = 'farmos_api_client'
 client_secret = 'client_secret'
 scope = 'farmos_restws_access'
-redirect_uri = 'http://localhost/authorized'
+redirect_uri = 'http://localhost/api/authorized'
 authorization_base_url = 'http://localhost/oauth2/authorize'
 token_url = 'http://localhost/oauth2/token'
 extra = {
