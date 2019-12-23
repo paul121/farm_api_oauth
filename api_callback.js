@@ -13,6 +13,16 @@ window.onload = function() {
   // Update the input fields with values from query parameters.
   const input_names = ["access_token", "expires_in", "token_type", "scope", "state"];
   for (input_name of input_names) {
-    document.getElementsByName(input_name)[0].value = String(url.searchParams.get(input_name));
+    try {
+      document.getElementsByName(input_name)[0].value = String(url.searchParams.get(input_name));
+    }
+    catch(error) {
+      console.error(error);
+    }
+  }
+
+  if (window.opener) {
+    window.opener.postMessage(window.location.search, "*");
+    window.close();
   }
 };
